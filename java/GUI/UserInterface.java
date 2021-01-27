@@ -49,7 +49,7 @@ public class UserInterface implements Runnable {
 		mainFrame();
 	}
 
-
+	//Creating the welcome frame
 	private void mainFrame() {
 		JFrame frame = new JFrame("Corona Tracking");
 
@@ -73,6 +73,7 @@ public class UserInterface implements Runnable {
 		frame.setLayout(null);
 		frame.setVisible(true);
 
+		//Adding action listener to select button
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +99,8 @@ public class UserInterface implements Runnable {
 	}
 
 	//***HERE ARE GLOBAL FRAMES**********
-
+	
+	//Creating the Global Totals frame
 	private void createGlobalTotalsJFrame() {
 		JFrame globalTotalsFrame = new JFrame("Global Totals");
 
@@ -126,7 +128,7 @@ public class UserInterface implements Runnable {
 	}
 
 
-
+	// Creating Global stats by a specified date frame
 	private void createGlobalByDateFrame(String date) {
 		JFrame dailyCasesFrame = new JFrame( formatDate(date) + " Global Cases");
 		dailyCasesFrame.setSize(400,500);
@@ -166,6 +168,8 @@ public class UserInterface implements Runnable {
 
 
 	//******HERE ARE BY COUNTRY FRAMES
+	
+	//Creating a countries stats on a specified date frame
 	private void createCountryByDateFrame(String country, String date) {
 
 		JFrame dailyByCountryFrame = new JFrame();
@@ -195,15 +199,18 @@ public class UserInterface implements Runnable {
 
 		Collections.sort(covidWrapper.getData());
 
+		//Here I am testing if the data includes province/state data, as well as removing unwanted characters.
 		if(covidWrapper.getData().size() == 1) {
 			countryDailyData.setText(covidWrapper.toString().replace("[", "").replace("]", "").replace("Province/State:", ""));
 			countryDailyData.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 
 		}else {
+			//Getting the computed countries total stats (based off the raw state/province data)
 			String computedString = computeTotalCountryCovidData(covidWrapper.getData()).toString();
 			countryDailyData.setText(covidWrapper.toString().replace("[", "").replace("]", "").replace(", Prov", "Prov"));
 
 			try {
+				// Adding the computed data to the already established JtextPane
 				countryDailyData.getStyledDocument().insertString(0, computedString, null);
 				countryDailyData.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 
@@ -232,7 +239,7 @@ public class UserInterface implements Runnable {
 		dailyByCountryFrame.setVisible(true);
 	}
 
-
+	//Creating Countries latest statistics frame
 	public void createCountryLatestFrame(String country) {
 		JFrame countryLatestFrame = new JFrame();
 		countryLatestFrame.setSize(400,500);
@@ -268,6 +275,8 @@ public class UserInterface implements Runnable {
 
 
 	///*******HERE ARE SEARCH FRAMES*******
+	
+	//Creating a country search frame
 	public void createCountrySearchFrame() {
 		JFrame countrySearchFrame = new JFrame();
 		countrySearchFrame.setSize(400,350); 
@@ -302,7 +311,7 @@ public class UserInterface implements Runnable {
 
 	}
 
-
+	//Creating the frame where users choose to see global statistics for a specified date
 	public void createDateSearchFrame() {
 		JFrame dateSearchFrame = new JFrame();
 		dateSearchFrame.setSize(400, 350);
@@ -352,7 +361,7 @@ public class UserInterface implements Runnable {
 		dateSearchFrame.setVisible(true);	
 	}
 
-
+	//Creating a frame that allows users to search for statistics for a specified country on a specified date
 	public void createCountryAndDateSearchFrame() {
 		JFrame countryAndDateSearchFrame = new JFrame();
 		countryAndDateSearchFrame.setSize(400,350);
@@ -407,7 +416,7 @@ public class UserInterface implements Runnable {
 
 
 	//INVALID/ERROR FRAMES
-
+	//Creating the date is out of the specified bounds for countries frame
 	public void createDateIsInvalidCountryFrame() {
 		JFrame dateIsInvalidCountryFrame = new JFrame();
 		dateIsInvalidCountryFrame.setSize(400,350);
@@ -455,7 +464,8 @@ public class UserInterface implements Runnable {
 		dateIsInvalidCountryFrame.add(submitCountryAndDateButton);
 
 	}
-
+	
+`	//Creating the date is out of the specified bounds for Global statistics frame
 	public void createDateIsInvalidGlobalFrame() {
 		JFrame dateIsInvalidFrame = new JFrame();
 		dateIsInvalidFrame.setSize(400,350);
@@ -505,7 +515,7 @@ public class UserInterface implements Runnable {
 
 	///****FUNCTIONS*****///
 
-
+	//Computing a countries covid statistics. This is used when the countries data is returned in a province/state format (no total data for the country, only by state/province
 	public CovidData computeTotalCountryCovidData(List<CovidData> data) {
 		int confirmed = 0; int recovered = 0; int deaths = 0; int active = 0; int confirmedDifferences = 0;
 		int recoveredDifferences = 0; int deathDifferences = 0; int activeDifference = 0;
@@ -522,12 +532,12 @@ public class UserInterface implements Runnable {
 		return new ComputedCovidData(confirmed, deaths, recovered, active, confirmedDifferences, deathDifferences, recoveredDifferences, activeDifference);
 
 	}
-
+	//Formats the date into the correct format for external API
 	public static String formatDate(String date) {
 		String [] formattingDate = date.split("-");
 		return formattingDate[1] + "/" + formattingDate[2] + "/" + formattingDate[0];
 	} 
-
+	//Creates a basic calendar
 	public JDatePicker createCalendar () {
 		DateModel<Date> dateModel = new UtilDateModel();
 		JDatePicker datePicker = new JDatePicker(dateModel, "yyyy-MM-dd");
@@ -535,7 +545,7 @@ public class UserInterface implements Runnable {
 		return datePicker;
 
 	}
-
+	//Checks if the given date is within 1-22-2020 and yesterdays date
 	public boolean isDateValid(String date) {
 
 		String dateArray[] = date.split("-");		
