@@ -33,7 +33,6 @@ public class CovidService {
 
 	}
 
-	//WHY IS THE RESTTEMPLATE NULL????
 	public GlobalCovidWrapper getGlobalLatestTotals() {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("x-rapidapi-key", "8f2e4461f2msha37e474fac5d055p1af07cjsn53d280da44d7");
@@ -84,7 +83,7 @@ public class CovidService {
 
 
 
-		//SHOULD NOT INSTATIATE HERE *****
+		
 		RestTemplate template = new RestTemplate();
 		ResponseEntity<GlobalCovidWrapper> response = template.exchange(
 				"https://covid-19-statistics.p.rapidapi.com/reports/total?date={date}",
