@@ -32,15 +32,16 @@ public class CovidService {
 		super();
 
 	}
-
+	
+	// Makes call to external API, and receives the latest global data
 	public GlobalCovidWrapper getGlobalLatestTotals() {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("x-rapidapi-key", "8f2e4461f2msha37e474fac5d055p1af07cjsn53d280da44d7");
 		headers.add("x-rapidapi-host", "covid-19-statistics.p.rapidapi.com");
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 
-		//SHOULD NOT INSTATIATE HERE *****
 		RestTemplate template = new RestTemplate();
+		
 		// make an HTTP GET request with headers
 		ResponseEntity<GlobalCovidWrapper> response = template.exchange(
 				"https://covid-19-statistics.p.rapidapi.com/reports/total",
@@ -52,7 +53,8 @@ public class CovidService {
 		return globalCovidWrapper;
 
 	}
-
+	
+	//Makes call to API and receives the data for a specified country on a specified date
 	public  CovidWrapper getDailyDataByCountry(String country, String date){
 
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -64,6 +66,7 @@ public class CovidService {
 
 		String url = "https://covid-19-statistics.p.rapidapi.com/reports?region_name=" + country + "&date=" + date;
 
+		// make an HTTP GET request with headers
 		ResponseEntity<CovidWrapper> response = template.exchange(
 				url, HttpMethod.GET,
 				httpEntity, new ParameterizedTypeReference<CovidWrapper>()  {
@@ -74,39 +77,37 @@ public class CovidService {
 		return covidWrapper;
 	}
 
+	//Makes call to API and receives the global data for a specified date
 	public GlobalCovidWrapper getDailyReportByDate(String date) {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("x-rapidapi-key", "8f2e4461f2msha37e474fac5d055p1af07cjsn53d280da44d7");
 		headers.add("x-rapidapi-host", "covid-19-statistics.p.rapidapi.com");
 		HttpEntity<String> httpEntityDaily = new HttpEntity<String>(headers);
-
-
-
-
 		
 		RestTemplate template = new RestTemplate();
+		
+		// make an HTTP GET request with headers
 		ResponseEntity<GlobalCovidWrapper> response = template.exchange(
 				"https://covid-19-statistics.p.rapidapi.com/reports/total?date={date}",
 				HttpMethod.GET, httpEntityDaily, new ParameterizedTypeReference<GlobalCovidWrapper>() {
 				}, date);
 
 		globalCovidWrapper = response.getBody();
-
-
-		//List<DailyReportTotals> list = response.getBody();
-		//System.out.println(list.isEmpty());
-		//dailyReports = list.get(0);
+		
 		return globalCovidWrapper;
 
 	}
-
+	
+	//Makes call to API and receives a countries latest data
 	public CountryLatestData getCountryTotals(String country) {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("x-rapidapi-key", "8f2e4461f2msha37e474fac5d055p1af07cjsn53d280da44d7");
 		headers.add("x-rapidapi-host", "covid-19-data.p.rapidapi.com");
 		HttpEntity<String> httpEntityDaily = new HttpEntity<String>(headers);
+		
 		RestTemplate template = new RestTemplate();
 
+		
 		if(country.equals("US")) {
 			ResponseEntity<List<CountryLatestData>> response =  template.exchange(
 					"https://covid-19-data.p.rapidapi.com/country?name={country}",
